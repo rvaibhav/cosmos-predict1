@@ -44,6 +44,7 @@ RUN echo "Installing dependencies. This will take a while..." && \
     CUDA_HOME=$CONDA_PREFIX pip install -v --disable-pip-version-check --no-cache-dir --no-build-isolation --config-settings "--build-option=--cpp_ext" --config-settings "--build-option=--cuda_ext" . && \
     echo "Environment setup complete"
 
+RUN echo "source ~/miniconda3/bin/activate cosmos-predict1" >> ~/.bashrc
 
 # Default command
 CMD ["/bin/bash"]
