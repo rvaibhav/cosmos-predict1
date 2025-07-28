@@ -28,6 +28,7 @@ RUN rm /bin/sh && ln -s /bin/bash /bin/sh && ln -s /lib64/libcuda.so.1 /lib64/li
 RUN apt-get -y update && apt-get -y install build-essential cmake ninja-build libgl1-mesa-dev ffmpeg
 
 COPY ./requirements_docker.txt /requirements_docker.txt
+COPY ./scripts/test_environment.py /scripts/test_environment.py
 
 RUN pip install --upgrade pip && pip install cmake ninja
 
@@ -52,7 +53,7 @@ ENV PYTHONPATH="/usr/local/lib/python3.10/dist-packages:${PYTHONPATH}"
 # Verify installation works
 RUN nvcc --version && \
     echo "=== Version Verification ===" && \
-    python scripts/test_environment.py && \
+    python /scripts/test_environment.py && \
     echo "✅ All libraries verified successfully with preserved PyTorch version"
 
 # Default command
