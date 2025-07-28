@@ -27,8 +27,6 @@ RUN apt-get update && apt-get install -y git tree ffmpeg wget
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh && ln -s /lib64/libcuda.so.1 /lib64/libcuda.so
 RUN apt-get -y update && apt-get -y install build-essential cmake ninja-build libgl1-mesa-dev ffmpeg
 
-# Copy the cosmos-predict1.yaml and requirements.txt files to the container
-COPY ./cosmos-predict1.yaml /cosmos-predict1.yaml
 COPY ./requirements_docker.txt /requirements_docker.txt
 
 RUN pip install --upgrade pip && pip install cmake ninja
@@ -54,10 +52,7 @@ ENV PYTHONPATH="/usr/local/lib/python3.10/dist-packages:${PYTHONPATH}"
 # Verify installation works
 RUN nvcc --version && \
     echo "=== Version Verification ===" && \
-    python -c "import torch; print('✅ PyTorch version preserved:', torch.__version__); print('✅ CUDA available:', torch.cuda.is_available()); print('✅ CUDA version in PyTorch:', torch.version.cuda)" && \
-    python -c "import transformer_engine.pytorch as te; print('✅ Transformer Engine successfully imported with pytorch submodule')" && \
-    python -c "import apex; print('✅ APEX successfully imported')" && \
-    python -c "from transformers.models.auto import image_processing_auto; print('✅ transformers.models.auto.image_processing_auto imported successfully - no DictValue error')" && \
+    python scripts/test_environment.py && \
     echo "✅ All libraries verified successfully with preserved PyTorch version"
 
 # Default command
